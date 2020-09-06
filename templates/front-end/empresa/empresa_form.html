@@ -1,0 +1,114 @@
+{% extends 'front-end/base.html' %}
+{% load static from staticfiles %}
+{% block head %}
+    <!--script for this page-->
+    <link rel="stylesheet" href="{% static 'lib/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.css' %}"/>
+
+    {% block form_head %}
+
+    {% endblock %}
+{% endblock %}
+{% block content %}
+    <h3><i class="{{ icono }}"></i> <i class="fa fa-angle-right"></i> {{ entidad }}</h3>
+    <!-- BASIC FORM ELELEMNTS -->
+    <div class="row mt">
+        <div class="col-lg-12">
+            <div class="form-panel">
+                <div class="form">
+                    <form class="cmxform form-horizontal style-form" id="signupForm" method="POST" action="{{ crud }}">
+                        <input type="hidden" id="action" name="action" value="{{ action }}">
+                        {% for hidden in form.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <div class="form-group">
+                                        <span class="label label-danger">{{ error }}</span>
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+                        {% for field in form.visible_fields %}
+                            <div class="form-group">
+                                <label style="font-size: 13px;"
+                                       class="col-lg-2 control-label">{{ field.label }}:</label>
+                                <div class="col-lg-10">
+                                    {% csrf_token %}
+                                    {{ form.media }}
+                                    {{ field }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <div class="form-group">
+                            <div class="col-lg-offset-2 col-lg-10">
+                                <button type="submit" class="btn btn-success has-ripple" style="display: none"
+                                        id="guardar"><i
+                                        class="fa fa-save"></i> Guardar<span class="ripple ripple-animate"
+                                                                             style="height: 115px; width: 115px; animation-duration: 0.7s;
+                                                                            animation-timing-function: linear; background: rgb(255, 255, 255);
+                                                                            opacity: 0.4; top: -47.875px; left: -23.5px;"></span>
+                                </button>
+                                <button type="button" class="btn btn-primary has-ripple" id="editar"><i
+                                        class="fa fa-edit"></i> {{ boton }}<span
+                                        class="ripple ripple-animate"
+                                        style="height: 115px; width: 115px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -47.875px; left: -23.5px;"></span>
+                                </button>
+                                <button type="button" onclick=" window.history.back();"
+                                        class="btn btn-danger has-ripple"><i
+                                        class="fa fa-times"></i>Cancelar<span class="ripple ripple-animate"
+                                                                              style="height: 111px; width: 111px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -34.875px; left: -14.5px;"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- /form-panel -->
+        </div>
+        <!-- /col-lg-12 -->
+    </div>
+    <!-- /row -->
+{% endblock %}
+
+
+
+{% block script %}
+    <script src="{% static 'lib/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#id_nombre').attr('readonly', true);
+            $('#id_ciudad').attr('readonly', true);
+            $('#id_ruc').attr('readonly', true);
+            $('#id_correo').attr('readonly', true);
+            $('#id_direccion').attr('readonly', true);
+            $('#id_iva').attr('readonly', true);
+            $('#id_telefono').attr('readonly', true);
+            $('#editar').on("click", editar);
+            $('input[name="iva"]').TouchSpin({
+               min: 0,
+                max: 100,
+                step: 0.01,
+                decimals: 2,
+                boostat: 5,
+                maxboostedstep: 10
+            });
+        });
+
+        function editar() {
+            $('#guardar').show();
+            $('#editar').hide();
+            $('#id_nombre').attr('readonly', false);
+            $('#id_ciudad').attr('readonly', false);
+            $('#id_ruc').attr('readonly', false);
+            $('#id_correo').attr('readonly', false);
+            $('#id_direccion').attr('readonly', false);
+            $('#id_iva').attr('readonly', false);
+            $('#id_telefono').attr('readonly', false);
+
+
+        }
+
+
+    </script>
+{% endblock %}

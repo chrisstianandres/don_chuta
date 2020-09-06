@@ -1,0 +1,48 @@
+{% extends 'front-end/list.html' %}
+{% load static from staticfiles %}
+{% block table %}
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Username</th>
+        <th>Empleado</th>
+        <th>Cedula</th>
+        <th>Cargo</th>
+        <th>telefono</th>
+        <th>Correo</th>
+        <th>Genero</th>
+        <th>Direccion</th>
+        <th>Estado</th>
+        <th class="text-center"><em class="fa fa-cog"></em></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if list %}
+        {% for dato in list %}
+            <tr>
+                <td>{{ dato.id }}</td>
+                <td>{{ dato.username }}</td>
+                <td> {{ dato.get_full_name }}  </td>
+                <td> {{ dato.cedula }}  </td>
+                <td> {{ dato.cargo.nombre }}  </td>
+                <td> {{ dato.telefono }}  </td>
+                <td> {{ dato.email }}  </td>
+                <td> {{ dato.get_sexo_display }}  </td>
+                <td> {{ dato.direccion }}  </td>
+                <td> {{ dato.get_estado_display }}  </td>
+                <td><a type="button" class="btn btn-success btn-xs" data-toggle="tooltip"
+                       title="Editar Datos"
+                       href="{% url 'empleado:editar' dato.id %}"><i class="fa fa-user-edit"></i></a>
+                    <a type="button" class="btn btn-primary btn-xs"
+                            data-toggle="tooltip"
+                            title="Gestionar Estado" rel="estado">
+                        <i class="fa fa-user-cog"></i></a>
+            </tr>
+        {% endfor %}
+    {% endif %}
+    </tbody>
+{% endblock %}
+{% block script %}
+    <script src="{% static 'apps/trabajador/trabajador_list.js' %}"></script>
+    <script src="{% static 'apps/funtions.js' %}"></script>
+{% endblock %}

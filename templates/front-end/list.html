@@ -1,0 +1,41 @@
+{% extends 'front-end/base.html' %}
+{% load static from staticfiles %}
+{% block head %}
+
+
+{% endblock %}
+{% block content %}
+    <h3><i class="{{ icono }}"></i> <i class="fa fa-angle-right"></i> {{ entidad }}</h3>
+    <!-- BASIC FORM ELELEMNTS -->
+    <div class="container col-lg-12">
+        <div class="row-mt1">
+            <div class="col-md-12">
+                <div class="panel">
+                    <div class="panel-body">
+                        <table id="datatable" class="table table-bordered table-hover">
+                            {% block table %}
+
+                            {% endblock %}
+                        </table>
+                    </div>
+                    <div class="panel-footer">
+                        <a type="button" class="btn btn-theme btn-sm" href="{{ nuevo }}">
+                            <i class="fa fa-plus" aria-hidden="true"></i> {{ boton }}
+                        </a>
+                        <a type="button" class="btn btn-theme04 btn-sm" id="reload" onclick=" location.reload();">
+                            <i class="fas fa-sync-alt"></i> Actualizar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block modal %}
+
+
+    {% endblock %}
+{% endblock %}
+
+
+
+

@@ -1,0 +1,42 @@
+{% extends 'front-end/list.html' %}
+{% load static from staticfiles %}
+{% block table %}
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Nombre</th>
+        <th>Categoria</th>
+        <th>Presentacion</th>
+        <th>Stock</th>
+        <th>Descripcion</th>
+        <th>Pvp</th>
+        <th class="text-center"><em class="fa fa-cog"></em></th>
+    </tr>
+    </thead>
+    <tbody>
+
+        {% for dato in object_list %}
+            <tr>
+                <td>{{ dato.id }}</td>
+                <td>{{ dato.nombre }}</td>
+                <td>{{ dato.categoria.nombre }}</td>
+                <td>{{ dato.presentacion.nombre }}</td>
+                <td>{{ dato.stock }}</td>
+                <td> {{ dato.descripcion }}  </td>
+                <td> {{ dato.pvp }}  </td>
+                <td><a type="button" class="btn btn-success btn-xs" data-toggle="tooltip"
+                   title="Editar Datos"
+                   href="{% url 'producto:editar' dato.id %}"><i class="fa fa-edit"></i></a>
+                <a type="button" class="btn btn-danger btn-xs"
+                        data-toggle="tooltip"
+                        title="Eliminar" rel="del">
+                    <i class="fa fa-trash"></i></a></td>
+            </tr>
+        {% endfor %}
+
+    </tbody>
+{% endblock %}
+{% block script %}
+    <script src="{% static 'apps/producto/producto_list.js' %}"></script>
+    <script src="{% static 'apps/funtions.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,93 @@
+{% load static from staticfiles %}
+<div id="sidebar" class="nav-collapse ">
+    <!-- sidebar menu start-->
+    <ul class="sidebar-menu" id="nav-accordion">
+        <p class="centered"><a href="#"><img src="{{ request.user.get_image }}" class="img-circle" width="80"
+                                             alt="user"></a></p>
+        <h5 class="centered">{{ user.first_name }} <br> {{ user.last_name }}</h5>
+        <li class="mt">
+            <a class="active" href="{% url 'menu' %}">
+                <i class="fa fa-home"></i>
+                <span>Menu Principal</span>
+            </a>
+        </li>
+        <li class="sub-menu">
+            <a href="#">
+                <i class="fa fa-users"></i>
+                <span>Clientes</span>
+            </a>
+            <ul class="sub">
+                <li><a href="{% url 'cliente:nuevo' %}">Nuevo</a></li>
+                <li><a href="{% url 'cliente:lista' %}">Lista</a></li>
+            </ul>
+        </li>
+        <li class="sub-menu">
+            <a href="#">
+                <i class="fa fa-industry"></i>
+                <span>Proveedores</span>
+            </a>
+            <ul class="sub">
+                <li><a href="{% url 'proveedor:nuevo' %}">Nuevo</a></li>
+                <li><a href="{% url 'proveedor:lista' %}">Lista</a></li>
+            </ul>
+        </li>
+        <li class="sub-menu">
+            <a href="#">
+                <i class="fab fa-amazon"></i>
+                <span>Productos</span>
+            </a>
+            <ul class="sub">
+                <li><a href="{% url 'producto:nuevo' %}">Nuevo Producto</a></li>
+                <li><a href="{% url 'producto:lista' %}">Lista de Productos</a></li>
+                <li><a href="{% url 'categoria:nuevo' %}">Nueva Categoria</a></li>
+                <li><a href="{% url 'categoria:lista' %}">Lista de Categorias</a></li>
+                <li><a href="{% url 'presentacion:nuevo' %}">Nueva Presentacion</a></li>
+                <li><a href="{% url 'presentacion:lista' %}">Lista de Presentaciones</a></li>
+            </ul>
+        </li>
+        <li class="sub-menu">
+            <a href="#">
+                <i class="fa fa-male"></i>
+                <span>Empleados</span>
+            </a>
+            <ul class="sub">
+                <li><a href="{% url 'empleado:nuevo' %}">Nuevo Empleado</a></li>
+                <li><a href="{% url 'empleado:lista' %}">Lista de Empleados</a></li>
+                <li><a href="{% url 'cargo:nuevo' %}">Nuevo Cargo</a></li>
+                <li><a href="{% url 'cargo:lista' %}">Lista de Cargos</a></li>
+            </ul>
+        </li>
+        <li class="sub-menu">
+            <a href="#">
+                <i class="fas fa-dollar-sign"></i>
+                <span>Compras</span>
+            </a>
+            <ul class="sub">
+                <li><a href="{% url 'compra:nuevo' %}">Nueva Compra</a></li>
+                <li><a href="{% url 'compra:lista' %}">Lista de Compras</a></li>
+            </ul>
+        </li>
+        <li class="sub-menu">
+            <a href="#">
+                <i class="fa fa-shopping-cart"></i>
+                <span>Ventas</span>
+            </a>
+            <ul class="sub">
+                <li><a href="{% url 'venta:nuevo' %}">Nueva Venta</a></li>
+                <li><a href="{% url 'venta:lista' %}">Lista de Ventas</a></li>
+            </ul>
+        </li>
+        <li class="sub-menu">
+            <a href="#">
+                <i class="fa fa-file-pdf"></i>
+                <span>Reportes</span>
+            </a>
+        </li><li class="sub-menu">
+            <a href="{% url 'empresa:editar' %}">
+                <i class="fa fa-cog"></i>
+                <span>Configuraciones</span>
+            </a>
+        </li>
+    </ul>
+    <!-- sidebar menu end-->
+</div>
