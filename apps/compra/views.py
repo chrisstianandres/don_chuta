@@ -223,8 +223,8 @@ def index(request):
     data = {}
     try:
         data = []
-        h = datetime.today() - timedelta(days=datetime.today().isoweekday() % 7) - timedelta(days=6)
-        for p in Detalle_compra.objects.filter(compra__fecha_compra__range=[h, h + timedelta(days=5)], compra__estado=1):
+        h = datetime.today() - timedelta(days=datetime.today().isoweekday() % 7)
+        for p in Detalle_compra.objects.filter(compra__fecha_compra__range=[h, h + timedelta(days=6)], compra__estado=1):
             data.append(p.toJSON())
     except Exception as e:
         data['error'] = str(e)

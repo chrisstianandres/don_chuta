@@ -52,6 +52,34 @@ var chart = Highcharts.chart('container2', {
 
 });
 
+var graph = Highcharts.chart('container3', {
+    chart: {
+        type: 'line'
+    },
+    title: {
+        text: 'Compras y ventas del año'
+    },
+    subtitle: {
+        text: 'Contraste de compras y ventas'
+    },
+    xAxis: {
+        categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+    },
+    yAxis: {
+        title: {
+            text: 'Dolares $'
+        }
+    },
+    plotOptions: {
+        line: {
+            dataLabels: {
+                enabled: true
+            },
+            enableMouseTracking: false
+        }
+    },
+});
+
 function cahrtventas() {
     $.ajax({
         url: '/venta/chart',
@@ -59,6 +87,7 @@ function cahrtventas() {
         data: {'action': 'chart'},
         dataSrc: "",
     }).done(function (data) {
+        console.log(data['chart3'].ventas);
         chart.addSeries(data['dat']);
         grapie.addSeries(
             {
@@ -68,12 +97,23 @@ function cahrtventas() {
                 data: data['chart2'].data
             }
         );
+        graph.addSeries(
+            {
+                name: 'Compras',
+                data: data['chart3'].compras
+            },
+        );
+        graph.addSeries(
+            {
+                name: 'Ventas',
+                data: data['chart3'].ventas
+            }
+        )
     });
 }
 
-
-$(function () {
-    var datatable = $("#datatable").DataTable({
+function datatbles() {
+    $("#datatable").DataTable({
         autoWidth: false,
         dom: "tip",
         ScrollX: '90%',
@@ -106,7 +146,7 @@ $(function () {
             $('td', row).eq(4).find('span').addClass('badge bg-important');
         }
     });
-    var datatable2 = $("#datatable2").DataTable({
+    $("#datatable2").DataTable({
         autoWidth: false,
         dom: "tip",
         ScrollX: '90%',
@@ -132,14 +172,24 @@ $(function () {
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {
-                    return '<span>' + data + '</span>';
+                    return '$' + data;
                 }
+            },
+            {
+                targets: '_all',
+                class: 'text-center',
+                orderable: false
             }
         ],
         createdRow: function (row, data, dataIndex) {
             $('td', row).eq(4).find('span').addClass('badge bg-important');
         }
     });
+}
+
+
+$(function () {
+    datatbles();
     cahrtventas();
 
 

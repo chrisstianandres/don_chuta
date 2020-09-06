@@ -11,6 +11,7 @@ from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import *
 
+from apps.compra.models import Compra
 from apps.venta.forms import VentaForm, Detalle_VentaForm
 from apps.venta.models import Venta, Detalle_venta
 from apps.empresa.models import Empresa
@@ -58,7 +59,7 @@ def crear(request):
                 c = Venta()
                 c.fecha_venta = datos['fecha_venta']
                 c.cliente_id = datos['cliente']
-                c.empleado_id =request.user.id
+                c.empleado_id = request.user.id
                 c.subtotal = float(datos['subtotal'])
                 c.iva = float(datos['iva'])
                 c.total = float(datos['total'])
@@ -227,7 +228,11 @@ def grap(request):
                 },
                 'year': datetime.now().year,
                 'chart2': {
-                        'data': dataChart2(),
+                    'data': dataChart2(),
+                },
+                'chart3': {
+                    'compras': datachartcontr(),
+                    'ventas': grap_data()
                 }
             }
         else:
@@ -241,7 +246,8 @@ def grap_data():
     year = datetime.now().year
     data = []
     for y in range(1, 13):
-        total = Venta.objects.filter(fecha_venta__year=year, fecha_venta__month=y, estado=1).aggregate(r=Coalesce(Sum('total'), 0)).get('r')
+        total = Venta.objects.filter(fecha_venta__year=year, fecha_venta__month=y, estado=1).aggregate(
+            r=Coalesce(Sum('total'), 0)).get('r')
         data.append(float(total))
     return data
 
@@ -254,7 +260,6 @@ def dataChart2():
     for p in producto:
         total = Detalle_venta.objects.filter(venta__fecha_venta__year=year, venta__fecha_venta__month=month,
                                              producto_id=p).aggregate(r=Coalesce(Sum('venta__total'), 0)).get('r')
-
         data.append({
             'name': p.nombre,
             'y': float(total)
@@ -262,15 +267,11 @@ def dataChart2():
     return data
 
 
-def vent():
+def datachartcontr():
     year = datetime.now().year
     data = []
-    c = Detalle_venta.objects.filter(venta__fecha_venta__year=year, venta__estado=1).aggregate(
-        r=Coalesce(Sum('cantidad'), 0)).get('r')
-    data.append(c)
+    for y in range(1, 13):
+        totalc = Compra.objects.filter(fecha_compra__year=year, fecha_compra__month=y, estado=1).aggregate(
+            r=Coalesce(Sum('total'), 0)).get('r')
+        data.append(float(totalc))
     return data
-
-
-
-
-
