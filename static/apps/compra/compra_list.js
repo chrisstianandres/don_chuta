@@ -1,10 +1,20 @@
 var datatable;
-$(function () {
 
+var fechas = {
+    'start_date': '',
+    'end_date': ''
+};
+$(function () {
     datatable = $("#datatable").DataTable({
         destroy: true,
         scrollX: true,
         autoWidth: false,
+        ajax: {
+            url: '/compra/data',
+            type: 'POST',
+            data: fechas,
+            dataSrc: ""
+        },
         language: {
             url: '//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json',
             searchPanes: {
@@ -57,18 +67,35 @@ $(function () {
                 targets: [-1],
                 class: 'text-center',
                 width: "10%",
+                render: function (data, type, row) {
+                    var detalle = '<a type="button" rel="detalle" class="btn btn-success btn-sm btn-round" data-toggle="tooltip" title="Detalle de Productos" ><i class="fa fa-search"></i></a>'+ '';
+                    var devolver = '<a type="button" rel="devolver" class="btn btn-danger btn-sm btn-round" style="color: white" data-toggle="tooltip" title="Devolver"><i class="fa fa-times"></i></a>';
+                    return detalle + devolver;
+                }
+            },
+            {
+                targets: [-2],
+                render: function (data, type, row) {
+                    return '<span>'+data+'</span>';
+                }
             },
             {
                 targets: [-3],
                 render: function (data, type, row) {
                     return pad(data, 10);
                 }
-            }
+            },
+            {
+                targets: [-4],
+                render: function (data, type, row) {
+                    return '$ '+data;
+                }
+            },
         ],
         createdRow: function (row, data, dataIndex) {
-            if (data[4] === '<span>FINALIZADA</span>') {
+            if (data[4] === 'FINALIZADA') {
                 $('td', row).eq(4).find('span').addClass('badge bg-success');
-            } else if (data[4] === '<span>DEVUELTA</span>') {
+            } else if (data[4] === 'DEVUELTA') {
                 $('td', row).eq(4).find('span').addClass('badge bg-important');
                 $('td', row).eq(5).find('a[rel="devolver"]').hide();
             }
@@ -141,7 +168,14 @@ $(function () {
 
 function daterange() {
     $("div.toolbar").html('<br><input type="text" name="fecha" class="form-control form-control-sm input-sm"><br>');
-    $('input[name="fecha"]').daterangepicker();
+    moment.locale('es');
+    $('input[name="fecha"]').daterangepicker({
+        locale: {
+            format: 'YYYY-MM-DD',
+            applyLabel: '<i class="fas fa-search"></i> Buscar',
+            cancelLabel: '<i class="fas fa-times"></i> Cancelar',
+        }
+    });
 
 }
 

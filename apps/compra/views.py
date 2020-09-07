@@ -25,7 +25,7 @@ class lista(ListView):
     template_name = 'front-end/compra/compra_list.html'
 
     def get_queryset(self):
-        return Compra.objects.order_by('-id')
+        return Compra.objects.none()
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
@@ -35,6 +35,39 @@ class lista(ListView):
         data['titulo'] = 'Listado de Compras'
         data['nuevo'] = '/compra/nuevo'
         return data
+
+
+@csrf_exempt
+def data(request):
+    data = []
+    start_date = request.POST.get('start_date', '')
+    end_date = request.POST.get('end_date', '')
+    try:
+        if start_date == '' and end_date == '':
+            compra =Compra.objects.all()
+            for c in compra:
+                data.append([
+                    c.fecha_compra.strftime('%d-%m-%Y'),
+                    c.proveedor.nombres,
+                    format(c.total, '.2f'),
+                    c.id,
+                    c.get_estado_display(),
+                    c.id
+                ])
+        else:
+            compra = Compra.objects.filter(fecha_compra__range=[start_date, end_date])
+            for c in compra:
+                data.append([
+                    c.fecha_compra.strftime('%d-%m-%Y'),
+                    c.proveedor.nombres,
+                    format(c.total, '.2f'),
+                    c.id,
+                    c.get_estado_display(),
+                    c.id
+                ])
+    except:
+        pass
+    return JsonResponse(data, safe=False)
 
 
 def nuevo(request):
