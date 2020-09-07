@@ -11,4 +11,5 @@ urlpatterns = [
     path('crear', login_required(views.crear), name='crear'),
     path('editar/<int:id>', login_required(views.editar), name='editar'),
     path('eliminar', login_required(views.eliminar), name='eliminar'),
+
 ]

@@ -1,4 +1,6 @@
-from django.http import HttpResponseRedirect, JsonResponse
+import json
+
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
@@ -21,6 +23,7 @@ def lista(request):
     list = Empleado.objects.all()
     data['list'] = list
     return render(request, "front-end/empleado/empleado_list.html", data)
+
 
 
 def nuevo(request):
