@@ -26,6 +26,9 @@ class lista(ListView):
     model = Venta
     template_name = 'front-end/venta/venta_list.html'
 
+    def get_queryset(self):
+        return Venta.objects.none()
+
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         data['icono'] = opc_icono
@@ -34,6 +37,39 @@ class lista(ListView):
         data['titulo'] = 'Listado de Ventas'
         data['nuevo'] = '/venta/nuevo'
         return data
+
+
+@csrf_exempt
+def data(request):
+    data = []
+    start_date = request.POST.get('start_date', '')
+    end_date = request.POST.get('end_date', '')
+    try:
+        if start_date == '' and end_date == '':
+            venta = Venta.objects.all()
+            for c in venta:
+                data.append([
+                    c.fecha_venta.strftime('%d-%m-%Y'),
+                    c.cliente.nombres + c.cliente.apellidos,
+                    format(c.total, '.2f'),
+                    c.id,
+                    c.get_estado_display(),
+                    c.id
+                ])
+        else:
+            venta = Venta.objects.filter(fecha_venta__range=[start_date, end_date])
+            for c in venta:
+                data.append([
+                    c.fecha_venta.strftime('%d-%m-%Y'),
+                    c.cliente.nombres + c.cliente.apellidos,
+                    format(c.total, '.2f'),
+                    c.id,
+                    c.get_estado_display(),
+                    c.id
+                ])
+    except:
+        pass
+    return JsonResponse(data, safe=False)
 
 
 def nuevo(request):

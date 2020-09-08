@@ -1,9 +1,34 @@
 var datatable;
 
-var fechas = {
-    'start_date': '',
-    'end_date': ''
+var datos = {
+    fechas: {
+        'start_date': '',
+        'end_date': ''
+    },
+    add: function (data) {
+        if (data.key === 1) {
+            this.fechas['start_date'] = data.startDate.format('YYYY-MM-DD');
+            this.fechas['end_date'] = data.endDate.format('YYYY-MM-DD');
+        }
+        else {
+            this.fechas['start_date'] = '';
+            this.fechas['end_date'] = '';
+        }
+
+        $.ajax({
+            url: '/compra/data',
+            type: 'POST',
+            data: this.fechas,
+            success: function (data) {
+                datatable.clear();
+                datatable.rows.add(data).draw();
+            }
+        });
+
+    },
 };
+
+
 $(function () {
     datatable = $("#datatable").DataTable({
         destroy: true,
@@ -12,7 +37,7 @@ $(function () {
         ajax: {
             url: '/compra/data',
             type: 'POST',
-            data: fechas,
+            data: datos.fechas,
             dataSrc: ""
         },
         language: {
@@ -25,7 +50,7 @@ $(function () {
                 },
                 title: {
                     _: 'Filtros seleccionados - %d',
-                    0: 'Ningun Filtro seleccionados',
+                    0: 'Ningun Filtro seleccionado',
                 },
                 activeMessage: 'Filtros activos (%d)',
 
@@ -43,7 +68,9 @@ $(function () {
                 }
             },
             {
-                className: 'btn-default my_class', extend: 'searchPanes', config: {
+                className: 'btn-default my_class',
+                extend: 'searchPanes',
+                config: {
                     cascadePanes: true,
                     viewTotal: true,
                     layout: 'columns-4'
@@ -56,7 +83,83 @@ $(function () {
                 searchPanes: {
                     show: true,
                 },
-                targets: [1, 2, 3, 4],
+                targets: [1, 3],
+            },
+            {
+                searchPanes: {
+                    show: true,
+                    options: [
+                        {
+                            label: 'FINALIZADA',
+                            value: function (rowData, rowIdx) {
+                                return rowData[4] === 'FINALIZADA';
+                            }
+                        },
+                        {
+                            label: 'DEVUELTA',
+                            value: function (rowData, rowIdx) {
+                                return rowData[4] === 'DEVUELTA';
+                            }
+                        },
+                    ]
+                },
+                targets: [4],
+            },
+            {
+                searchPanes: {
+                    show: true,
+                    options: [
+                        {
+                            label: 'Menos de $ 10',
+                            value: function (rowData, rowIdx) {
+                                return rowData[2] < 10;
+                            }
+                        },
+                        {
+                            label: '$ 10 a $ 50',
+                            value: function (rowData, rowIdx) {
+                                return rowData[2] <= 50 && rowData[2] >= 10;
+                            }
+                        },
+                        {
+                            label: '$ 50 a $ 100',
+                            value: function (rowData, rowIdx) {
+                                return rowData[2] <= 100 && rowData[2] >= 50;
+                            }
+                        },
+                        {
+                            label: '$ 100 a $ 200',
+                            value: function (rowData, rowIdx) {
+                                return rowData[2] <= 200 && rowData[2] >= 100;
+                            }
+                        },
+                        {
+                            label: '$ 200 a $ 300',
+                            value: function (rowData, rowIdx) {
+                                return rowData[2] <= 300 && rowData[2] >= 200;
+                            }
+                        },
+                        {
+                            label: '$ 300 a $ 400',
+                            value: function (rowData, rowIdx) {
+                                return rowData[2] <= 400 && rowData[2] >= 300;
+                            }
+                        },
+                         {
+                            label: '$ 400 a $ 500',
+                            value: function (rowData, rowIdx) {
+                                return rowData[2] <= 500 && rowData[2] >= 400;
+                            }
+                        },
+                        {
+                            label: 'Mas de $ 500',
+                            value: function (rowData, rowIdx) {
+                                return rowData[2] > 500;
+                            }
+                        },
+                    ]
+                },
+                targets: [2],
             },
             {
                 targets: '_all',
@@ -68,7 +171,7 @@ $(function () {
                 class: 'text-center',
                 width: "10%",
                 render: function (data, type, row) {
-                    var detalle = '<a type="button" rel="detalle" class="btn btn-success btn-sm btn-round" data-toggle="tooltip" title="Detalle de Productos" ><i class="fa fa-search"></i></a>'+ '';
+                    var detalle = '<a type="button" rel="detalle" class="btn btn-success btn-sm btn-round" data-toggle="tooltip" title="Detalle de Productos" ><i class="fa fa-search"></i></a>' + '';
                     var devolver = '<a type="button" rel="devolver" class="btn btn-danger btn-sm btn-round" style="color: white" data-toggle="tooltip" title="Devolver"><i class="fa fa-times"></i></a>';
                     return detalle + devolver;
                 }
@@ -76,7 +179,7 @@ $(function () {
             {
                 targets: [-2],
                 render: function (data, type, row) {
-                    return '<span>'+data+'</span>';
+                    return '<span>' + data + '</span>';
                 }
             },
             {
@@ -88,7 +191,7 @@ $(function () {
             {
                 targets: [-4],
                 render: function (data, type, row) {
-                    return '$ '+data;
+                    return '$ ' + data;
                 }
             },
         ],
@@ -102,8 +205,6 @@ $(function () {
 
         }
     });
-
-
     $('#datatable tbody').on('click', 'a[rel="devolver"]', function () {
         $('.tooltip').remove();
         var tr = datatable.cell($(this).closest('td, li')).index();
@@ -164,17 +265,26 @@ $(function () {
 
         });
 
+
 });
 
 function daterange() {
-    $("div.toolbar").html('<br><input type="text" name="fecha" class="form-control form-control-sm input-sm"><br>');
-    moment.locale('es');
+    $("div.toolbar").html('<br><div class="col-lg-3"><input type="text" name="fecha" class="form-control form-control-sm input-sm"></div> <br>');
     $('input[name="fecha"]').daterangepicker({
         locale: {
             format: 'YYYY-MM-DD',
             applyLabel: '<i class="fas fa-search"></i> Buscar',
             cancelLabel: '<i class="fas fa-times"></i> Cancelar',
         }
+    }).on('apply.daterangepicker', function (ev, picker) {
+        picker['key']=1;
+        datos.add(picker);
+        // filter_by_date();
+
+    }).on('cancel.daterangepicker', function (ev, picker) {
+        picker['key']=0;
+        datos.add(picker);
+
     });
 
 }
