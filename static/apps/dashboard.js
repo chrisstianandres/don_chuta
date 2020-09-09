@@ -148,8 +148,9 @@ function datatbles() {
     });
     $("#datatable2").DataTable({
         autoWidth: false,
+        // responsive: true,
         dom: "tip",
-        ScrollX: '90%',
+        // ScrollX: '90%',
         language: {
             "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
         },
@@ -161,7 +162,6 @@ function datatbles() {
         columns: [
             {data: 'compra.fecha_compra'},
             {data: "producto.nombre"},
-            {data: "producto.categoria.nombre"},
             {data: "producto.presentacion.nombre"},
             {data: "cantidad"},
             {data: "compra.total"}
@@ -176,14 +176,16 @@ function datatbles() {
                 }
             },
             {
+                targets: [-2],
+                class: 'text-center',
+                width: '10%'
+            },
+            {
                 targets: '_all',
                 class: 'text-center',
                 orderable: false
             }
-        ],
-        createdRow: function (row, data, dataIndex) {
-            $('td', row).eq(4).find('span').addClass('badge bg-important');
-        }
+        ]
     });
 }
 

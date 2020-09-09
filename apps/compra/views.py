@@ -49,6 +49,7 @@ def data(request):
                 data.append([
                     c.fecha_compra.strftime('%d-%m-%Y'),
                     c.proveedor.nombres,
+                    c.empleado.get_full_name(),
                     format(c.total, '.2f'),
                     c.id,
                     c.get_estado_display(),
@@ -60,6 +61,7 @@ def data(request):
                 data.append([
                     c.fecha_compra.strftime('%d-%m-%Y'),
                     c.proveedor.nombres,
+                    c.empleado.get_full_name(),
                     format(c.total, '.2f'),
                     c.id,
                     c.get_estado_display(),

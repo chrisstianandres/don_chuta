@@ -1,5 +1,6 @@
 $(function () {
-    $('#save').on('click', function () {
+    $('#formlogin').on('submit', function (e) {
+        e.preventDefault();
         if ($('input[name="username"]').val() === "") {
             menssaje_error('Error!', "Debe ingresar un Username", 'far fa-times-circle');
             return false

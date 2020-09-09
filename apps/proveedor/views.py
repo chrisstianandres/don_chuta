@@ -19,7 +19,7 @@ crud = '/proveedor/crear'
 def proveedor_lista(request):
     data = {
         'icono': opc_icono, 'entidad': opc_entidad,
-        'boton': 'Nuevo Proveedor', 'titulo': 'Listado de Proveedor',
+        'boton': 'Nuevo Proveedor', 'titulo': 'Listado de Proveedores',
         'nuevo': '/proveedor/nuevo'
     }
     list = Proveedor.objects.all()

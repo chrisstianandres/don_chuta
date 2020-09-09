@@ -1,0 +1,63 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dashboard">
+    <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+    <title>Dashio - Bootstrap Admin Template</title>
+
+    <!-- Favicons -->
+    <link href="{% static 'img/favicon.png' %}" rel="icon">
+    <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <!--external css-->
+    <link href="{% static 'lib/font-awesome/css/font-awesome.css' %}" rel="stylesheet"/>
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style-responsive.css' %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'lib/fontawesome-free-5.14.0-web/css/all.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
+</head>
+
+<body>
+<div id="login-page">
+    <div class="container">
+        <form class="form-login" id="formlogin">
+            <h2 class="form-login-heading">Bienvenido</h2>
+            <h2 class="text-center" style="color: #00a6b2">Inicia Sesion</h2>
+            <div class="login-wrap">
+                <input type="text" class="form-control" placeholder="Usuario" autofocus name="username">
+                <br>
+                <input type="password" class="form-control" placeholder="Contraseña" name="password">
+                <br>
+                <button class="btn btn-theme btn-block" type="submit"><i class="fa fa-lock"></i> INGRESAR
+                </button>
+                <hr>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- js placed at the end of the document so the pages load faster -->
+<script src="{% static 'lib/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'lib/bootstrap/js/bootstrap.min.js' %}"></script>
+<!--BACKSTRETCH-->
+<!-- You can use an image of whatever size. This script will stretch to fit in any screen size.-->
+<script type="text/javascript" src="{% static 'lib/jquery.backstretch.min.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<script type="text/javascript" src="{% static 'apps/login.js' %}"></script>
+<script type="text/javascript" src="{% static 'apps/funtions.js' %}"></script>
+<script>
+    $.backstretch("{% static 'img/logeo.jpg'%}", {
+        speed: 500
+    });
+</script>
+</body>
+
+</html>

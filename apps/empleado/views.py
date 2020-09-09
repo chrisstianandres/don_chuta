@@ -25,6 +25,29 @@ def lista(request):
     return render(request, "front-end/empleado/empleado_list.html", data)
 
 
+@csrf_exempt
+def data(request):
+    data = []
+    try:
+        empleado = Empleado.objects.all()
+        for c in empleado:
+            data.append([
+                c.id,
+                c.username,
+                c.get_full_name(),
+                c.cedula,
+                c.cargo.nombre,
+                c.direccion,
+                c.telefono,
+                c.get_sexo_display(),
+                c.get_estado_display(),
+                c.id,
+            ])
+
+    except:
+        pass
+    return JsonResponse(data, safe=False)
+
 
 def nuevo(request):
     data = {
