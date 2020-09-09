@@ -200,3 +200,24 @@ def estado(request):
     except Exception as e:
         data['error'] = str(e)
     return JsonResponse(data)
+
+
+def profile(request):
+    empleado = Empleado.objects.get(id=request.user.id)
+    crud = '/empleado/profile'
+    data = {
+        'icono': opc_icono, 'entidad': opc_entidad, 'crud': crud,
+        'boton': 'Guardar Empleado', 'action': 'add', 'titulo': 'Perfil de Usuario'
+    }
+    if request.method == 'GET':
+        form = EmpleadoForm(instance=empleado)
+        data['form'] = form
+    else:
+        form = EmpleadoForm(request.POST, instance=empleado)
+        if form.is_valid():
+            form.save()
+        else:
+            data['form'] = form
+        return HttpResponseRedirect('/empleado/profile')
+    return render(request, 'front-end/profile.html', data)
+        # return render(request, 'front-end/profile.html', data)

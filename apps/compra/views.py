@@ -4,8 +4,9 @@ from datetime import datetime, timedelta
 from django.db import transaction
 from django.db.models import Sum
 from django.db.models.functions import Coalesce
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import *
 
@@ -14,6 +15,11 @@ from apps.compra.models import Compra, Detalle_compra
 from apps.empresa.models import Empresa
 from apps.producto.models import Producto
 from datetime import date
+import os
+from django.conf import settings
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from django.contrib.staticfiles import finders
 
 opc_icono = 'fa fa-shopping-bag'
 opc_entidad = 'Compras'
@@ -44,7 +50,7 @@ def data(request):
     end_date = request.POST.get('end_date', '')
     try:
         if start_date == '' and end_date == '':
-            compra =Compra.objects.all()
+            compra = Compra.objects.all()
             for c in compra:
                 data.append([
                     c.fecha_compra.strftime('%d-%m-%Y'),
@@ -105,10 +111,12 @@ def crear(request):
                     dv.compra_id = c.id
                     dv.producto_id = i['id']
                     dv.cantidad = int(i['cantidad'])
+                    dv.subtotal = int(i['subtotal'])
                     dv.save()
                     x = Producto.objects.get(pk=i['id'])
                     x.stock = x.stock + int(i['cantidad'])
                     x.save()
+                    data['id'] = c.id
                     data['resp'] = True
         else:
             data['resp'] = False
@@ -259,12 +267,59 @@ def index(request):
     try:
         data = []
         h = datetime.today() - timedelta(days=datetime.today().isoweekday() % 7)
-        for p in Detalle_compra.objects.filter(compra__fecha_compra__range=[h, h + timedelta(days=6)], compra__estado=1):
+        for p in Detalle_compra.objects.filter(compra__fecha_compra__range=[h, h + timedelta(days=6)],
+                                               compra__estado=1):
             data.append(p.toJSON())
     except Exception as e:
         data['error'] = str(e)
     return JsonResponse(data, safe=False)
 
 
+class printpdf(View):
+    def link_callback(self, uri, rel):
+        """
+        Convert HTML URIs to absolute system paths so xhtml2pdf can access those
+        resources
+        """
+        result = finders.find(uri)
+        if result:
+            if not isinstance(result, (list, tuple)):
+                result = [result]
+            result = list(os.path.realpath(path) for path in result)
+            path = result[0]
+        else:
+            sUrl = settings.STATIC_URL  # Typically /static/
+            sRoot = settings.STATIC_ROOT  # Typically /home/userX/project_static/
+            mUrl = settings.MEDIA_URL  # Typically /media/
+            mRoot = settings.MEDIA_ROOT  # Typically /home/userX/project_static/media/
 
+            if uri.startswith(mUrl):
+                path = os.path.join(mRoot, uri.replace(mUrl, ""))
+            elif uri.startswith(sUrl):
+                path = os.path.join(sRoot, uri.replace(sUrl, ""))
+            else:
+                return uri
 
+        # make sure that file exists
+        if not os.path.isfile(path):
+            raise Exception(
+                'media URI must start with %s or %s' % (sUrl, mUrl)
+            )
+        return path
+
+    def get(self, request, *args, **kwargs):
+        try:
+            template = get_template('front-end/report/pdf_compra.html')
+            context = {'title': 'Comprobante de Compra',
+                       'sale': Compra.objects.get(pk=self.kwargs['pk']),
+                       'empresa': Empresa.objects.get(id=1),
+                       'icon': 'media/logo_don_chuta.png'
+                       }
+            html = template.render(context)
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+            pisa_status = pisa.CreatePDF(html, dest=response, link_callback=self.link_callback)
+            return response
+        except:
+            pass
+        return HttpResponseRedirect(reverse_lazy('compra:lista'))

@@ -1,0 +1,148 @@
+{% extends 'front-end/base.html' %}
+{% load static from staticfiles %}
+{% block content %}
+    <section class="wrapper site-min-height">
+        <div class="row mt">
+            <div class="col-lg-12">
+                <div class="row content-panel">
+                    <div class="col-md-4 profile-text mt mb centered">
+                        <div class="right-divider hidden-sm hidden-xs">
+                            <h4 id="comp_real">30</h4>
+                            <h6>Compras Realizadas</h6>
+                            <h4>290</h4>
+                            <h6>Ventas Realizadas</h6>
+
+                        </div>
+                    </div>
+                    <!-- /col-md-4 -->
+                    <div class="col-md-4 profile-text">
+                        <h3>{{ request.user.get_full_name }}</h3>
+                        <h6>{{ request.user.cargo.nombre }}</h6>
+                        <h5>Ultimo Acceso</h5>
+                        <h5>{{ request.user.last_login }}</h5>
+                        <br>
+                        <p>
+                            <button class="btn btn-theme"><i class="fas fa-sign-out-alt" href="{% url 'logout' %}"></i> Cerrar Sesion</button>
+                        </p>
+                    </div>
+                    <!-- /col-md-4 -->
+                    <div class="col-md-4 centered">
+                        <div class="profile-pic">
+                            <p><img src="{{ request.user.get_image }}" class="img-circle"></p>
+                        </div>
+                    </div>
+                    <!-- /col-md-4 -->
+                </div>
+                <!-- /row -->
+            </div>
+            <!-- /col-lg-12 -->
+            <div class="col-lg-12 mt">
+                <div class="row content-panel">
+                    <div class="panel-heading">
+                        <ul class="nav nav-tabs nav-justified">
+                            <li class="active">
+                                <a data-toggle="tab" href="#overview">Datos Personales</a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#edit">Editar Perfil</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /panel-heading -->
+                    <div class="panel-body">
+                        <div class="tab-content">
+                            <div id="overview" class="tab-pane active">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="detailed mt">
+                                            <h4>Perfil de Usuario</h4>
+                                            <div class="recent-activity">
+                                                <div class="activity-panel">
+                                                    <h5>Nombres Completos</h5>
+                                                    <p>{{ request.user.get_full_name }}</p>
+                                                </div>
+                                                <div class="activity-icon bg-theme02"><i class="fa fa-user"></i>
+                                                </div>
+                                                <div class="activity-panel">
+                                                    <h5>Fecha de Registro</h5>
+                                                    <p>{{ request.user.date_joined }}</p>
+                                                </div>
+                                                <div class="activity-icon bg-theme04"><i class="fa fa-clock"></i>
+                                                </div>
+                                                <div class="activity-panel">
+                                                    <h5>Numero de Identificacion</h5>
+                                                    <p>{{ request.user.cedula }}</p>
+                                                </div>
+                                                <div class="activity-icon bg-theme04"><i class="fa fa-address-card"></i>
+                                                </div>
+                                                <div class="activity-panel">
+                                                    <h5>Telefono</h5>
+                                                    <p>{{ request.user.telefono }}</p>
+                                                </div>
+                                                <div class="activity-icon bg-theme"><i class="fa fa-phone"></i>
+                                                </div>
+                                                <div class="activity-panel">
+                                                    <h5>Usename</h5>
+                                                    <p>{{ request.user.username }}</p>
+                                                </div>
+                                                <div class="activity-icon bg-theme03"><i class="fa fa-user-ninja"></i>
+                                                </div>
+                                            </div>
+                                            <!-- /recent-activity -->
+                                        </div>
+                                        <!-- /detailed -->
+                                    </div>
+                                    <!-- /col-md-6 -->
+                                </div>
+                            </div>
+                            <!-- /tab-pane -->
+                            <div id="edit" class="tab-pane">
+                                <div class="row">
+                                    <div class="col-lg-8 col-lg-offset-2 detailed">
+                                        <h4 class="mb">Editar Perfil</h4>
+                                        <form role="form" id="form" class="form-horizontal" action="{{ crud }}" method="POST">
+                                            <div class="form-group">
+                                                {% csrf_token %}
+                                                {{ form.as_p }}
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-lg-offset-2 col-lg-10">
+                                                    <button class="btn btn-theme" type="submit"><i
+                                                            class="fa fa-save"></i> Guardar
+                                                    </button>
+                                                    <button class="btn btn-theme04" type="button"><i class="fa fa-times"
+                                                                                                     onclick="location.reload();"></i>
+                                                        Cancelar
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <!-- /col-lg-8 -->
+                                </div>
+                                <!-- /row -->
+                            </div>
+                            <!-- /tab-pane -->
+                        </div>
+                        <!-- /tab-content -->
+                    </div>
+                    <!-- /panel-body -->
+                </div>
+                <!-- /col-lg-12 -->
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
+    </section>
+{% endblock %}
+{% block script %}
+    <script src=" https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/additional-methods.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/additional-methods.min.js"></script>
+{% endblock %}
+{% block extra %}
+    <script src="{% static 'apps/trabajador/trabajador.js' %}"></script>
+{% endblock %}
+
+

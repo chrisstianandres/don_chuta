@@ -16,7 +16,6 @@ var ventas = {
             dict.subtotal = dict.cantidad * parseFloat(dict.pvp);
             subtotal += dict.subtotal;
             iva_emp = dict.iva_emp;
-            console.log(dict.pvp);
         });
         this.items.subtotal = subtotal;
         this.items.iva = this.items.subtotal * iva_emp;
@@ -164,21 +163,20 @@ $(function () {
         var parametros;
         ventas.items.fecha_venta = $('input[name="fecha_venta"]').val();
         ventas.items.cliente = $('#id_cliente option:selected').val();
-        if (action === 'edit') {
-            parametros = {'ventas': JSON.stringify(ventas.items)};
-            parametros['action'] = action;
-            parametros['key'] = key;
-            save_with_ajax('Alerta',
-                '../../venta/editar_save', 'Esta seguro que desea editar esta venta?', parametros, function () {
-                    location.href = '../../venta/lista';
-                });
-        } else {
-            parametros = {'ventas': JSON.stringify(ventas.items)};
-            save_with_ajax('Alerta',
-                '/venta/crear', 'Esta seguro que desea guardar esta venta?', parametros, function () {
+
+        parametros = {'ventas': JSON.stringify(ventas.items)};
+        save_with_ajax('Alerta',
+            '/venta/crear', 'Esta seguro que desea guardar esta venta?', parametros, function (response) {
+                printpdf('Alerta!', '¿Desea generar el comprobante en PDF?', function () {
+                    window.open('/venta/printpdf/' + response['id'], '_blank');
+                    // location.href = '/venta/printpdf/' + response['id'];
                     location.href = '/venta/lista';
-                });
-        }
+                }, function () {
+                    location.href = '/venta/lista';
+                })
+
+            });
+
     });
 });
 

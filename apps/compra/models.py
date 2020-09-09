@@ -44,6 +44,7 @@ class Detalle_compra(models.Model):
     compra = models.ForeignKey(Compra, on_delete=models.PROTECT)
     producto = models.ForeignKey(Producto, on_delete=models.PROTECT)
     cantidad = models.IntegerField(default=1)
+    subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
 
     def __str__(self):
         return '%s %s' % (self.compra, self.producto.nombre)

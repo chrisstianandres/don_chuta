@@ -41,10 +41,10 @@
                                         <tr>
                                             <th><em class="fas fa-trash-alt"></em></th>
                                             <th>Producto</th>
-                                            <th>Categoria</th>
-                                            <th>Presentacion</th>
+                                            <th>Catg</th>
+                                            <th>Prest</th>
                                             <th>Stock</th>
-                                            <th>Cantidad</th>
+                                            <th>Cant</th>
                                             <th>Pvp</th>
                                             <th>Subtotal</th>
                                         </tr>
@@ -97,7 +97,7 @@
     <script src="{% static 'apps/venta/venta.js' %}"></script>
     <script src="{% static 'apps/funtions.js' %}"></script>
     <script>
-        ventas.items.productos = {{ detalle|safe }};
+        {#ventas.items.productos = {{ detalle|safe }};#}
         ventas.list();
     </script>
 {% endblock %}

@@ -12,5 +12,6 @@ urlpatterns = [
     path('estado', login_required(views.estado), name='estado'),
     path('editar/<int:id>', login_required(views.editar), name='editar'),
     path('data', login_required(views.data), name='data'),
+    path('profile', login_required(views.profile), name='profile'),
 
 ]

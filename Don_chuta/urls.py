@@ -23,28 +23,28 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-                  path('admin/', admin.site.urls),
+path('admin/', admin.site.urls),
+# sistema
+path('', login_required(backEnd.menu), name='menu'),
+path('login/', backEnd.logeo, name='login'),
+path('logout/', backEnd.disconnect, name='logout'),
+path('connect/', backEnd.connect, name='connect'),
+path('empresa/', include('apps.empresa.urls', namespace='empresa')),
+path('cliente/', include('apps.cliente.urls', namespace='cliente')),
+path('cargo/', include('apps.cargo.urls', namespace='cargo')),
+path('proveedor/', include('apps.proveedor.urls', namespace='proveedor')),
+path('producto/', include('apps.producto.urls', namespace='producto')),
+path('presentacion/', include('apps.presentacion.urls', namespace='presentacion')),
+path('categoria/', include('apps.categoria.urls', namespace='categoria')),
+path('empleado/', include('apps.empleado.urls', namespace='empleado')),
+path('compra/', include('apps.compra.urls', namespace='compra')),
+path('venta/', include('apps.venta.urls', namespace='venta')),
+# path('empleado/', include('apps.empleado.urls', namespace='empleado')),
+]
+              # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
+              # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-                  # sistema
-                  path('', login_required(backEnd.menu), name='menu'),
-                  path('login/', backEnd.logeo, name='login'),
-                  path('logout/', backEnd.disconnect, name='logout'),
-                  path('connect/', backEnd.connect, name='connect'),
-                  path('empresa/', include('apps.empresa.urls', namespace='empresa')),
-                  path('cliente/', include('apps.cliente.urls', namespace='cliente')),
-                  path('cargo/', include('apps.cargo.urls', namespace='cargo')),
-                  path('proveedor/', include('apps.proveedor.urls', namespace='proveedor')),
-                  path('producto/', include('apps.producto.urls', namespace='producto')),
-                  path('presentacion/', include('apps.presentacion.urls', namespace='presentacion')),
-                  path('categoria/', include('apps.categoria.urls', namespace='categoria')),
-                  path('empleado/', include('apps.empleado.urls', namespace='empleado')),
-                  path('compra/', include('apps.compra.urls', namespace='compra')),
-                  path('venta/', include('apps.venta.urls', namespace='venta')),
-                  # path('empleado/', include('apps.empleado.urls', namespace='empleado')),
-              ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL,
-                                                                                           document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-# if settings.DEBUG:
-#     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-#

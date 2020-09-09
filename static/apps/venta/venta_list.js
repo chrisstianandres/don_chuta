@@ -63,15 +63,14 @@ $(function () {
                 },
                 activeMessage: 'Filtros activos (%d)',
                 emptyPanes: 'There are no panes to display. :/',
-                sZeroRecords :    "No se encontraron resultados",
+                sZeroRecords: "No se encontraron resultados",
 
             }
         },
-        order: [[5, "desc"]],
+        order: [[0, "desc"]],
         dom: 'B<"toolbar">frtip ',
         buttons: [
             {
-                // text: '<i class="fa fa-search-minus" id="fecha"> Filtar por fecha</i>'
                 text: '<i class="fa fa-search-minus"> Filtar por fecha</i>',
                 className: 'btn-success my_class',
                 action: function (e, dt, node, config) {
@@ -279,14 +278,15 @@ $(function () {
                     return '<span>' + data + '</span>';
                 }
             },
-             {
+            {
                 targets: [-1],
                 class: 'text-center',
-                width: "10%",
+                width: "15%",
                 render: function (data, type, row) {
-                    var detalle = '<a type="button" rel="detalle" class="btn btn-success btn-sm btn-round" data-toggle="tooltip" title="Detalle de Productos" ><i class="fa fa-search"></i></a>' + '';
-                    var devolver = '<a type="button" rel="devolver" class="btn btn-danger btn-sm btn-round" style="color: white" data-toggle="tooltip" title="Devolver"><i class="fa fa-times"></i></a>';
-                    return detalle + devolver;
+                    var detalle = '<a type="button" rel="detalle" class="btn btn-success btn-sm btn-round" data-toggle="tooltip" title="Detalle de Productos" ><i class="fa fa-search"></i></a>' + ' ';
+                    var devolver = '<a type="button" rel="devolver" class="btn btn-danger btn-sm btn-round" style="color: white" data-toggle="tooltip" title="Devolver"><i class="fa fa-times"></i></a>'+ ' ';
+                    var pdf = '<a type="button" href= "/venta/printpdf/' + row[4] + '" rel="pdf" class="btn btn-primary btn-sm btn-round" style="color: white" data-toggle="tooltip" title="Reporte PDF"><i class="fa fa-file-pdf"></i></a>';
+                    return detalle + devolver + pdf;
                 }
             },
             {
@@ -302,6 +302,7 @@ $(function () {
             } else if (data[5] === 'DEVUELTA') {
                 $('td', row).eq(5).find('span').addClass('badge bg-important');
                 $('td', row).eq(6).find('a[rel="devolver"]').hide();
+                $('td', row).eq(6).find('a[rel="pdf"]').hide();
             }
 
         }
@@ -316,7 +317,7 @@ $(function () {
             '/venta/estado', 'Esta seguro que desea devolver esta venta?', parametros,
             function () {
                 menssaje_ok('Exito!', 'Exito al devolver la venta', 'far fa-smile-wink', function () {
-                   datatable.ajax.reload(null, false);
+                    datatable.ajax.reload(null, false);
                 })
             });
 
@@ -325,14 +326,12 @@ $(function () {
         var tr = datatable.cell($(this).closest('td, li')).index();
         var data = datatable.row(tr.row).data();
         var parametros = {'id': data['6']};
-        console.log(parametros);
         save_estado('Alerta',
             '/venta/eliminar', 'Esta seguro que desea eliminar esta venta?', parametros,
             function () {
                 menssaje_ok('Exito!', 'Exito al Eliminar la venta', 'far fa-smile-wink')
             });
-    })
-        .on('click', 'a[rel="detalle"]', function () {
+    }).on('click', 'a[rel="detalle"]', function () {
             $('.tooltip').remove();
             var tr = datatable.cell($(this).closest('td, li')).index();
             var data = datatable.row(tr.row).data();
@@ -358,7 +357,7 @@ $(function () {
                     {data: 'producto.presentacion.nombre'},
                     {data: 'cantidad'},
                     {data: 'producto.pvp'},
-                    {data: 'venta.subtotal'}
+                    {data: 'subtotal'}
                 ],
                 columnDefs: [
                     {
@@ -389,12 +388,12 @@ function daterange() {
             cancelLabel: '<i class="fas fa-times"></i> Cancelar',
         }
     }).on('apply.daterangepicker', function (ev, picker) {
-        picker['key']=1;
+        picker['key'] = 1;
         datos.add(picker);
         // filter_by_date();
 
     }).on('cancel.daterangepicker', function (ev, picker) {
-        picker['key']=0;
+        picker['key'] = 0;
         datos.add(picker);
 
     });

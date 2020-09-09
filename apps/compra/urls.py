@@ -17,5 +17,6 @@ urlpatterns = [
     path('eliminar', login_required(views.eliminar), name='eliminar'),
     path('index', login_required(views.index), name='index'),
     path('data', login_required(views.data), name='data'),
+    path('printpdf/<int:pk>', login_required(printpdf.as_view()), name='printpdf'),
     # path('chart', login_required(views.grap), name='chart')
 ]

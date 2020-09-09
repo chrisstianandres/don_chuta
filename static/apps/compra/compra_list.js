@@ -67,7 +67,7 @@ $(function () {
 
             }
         },
-        order: [[3, "desc"]],
+        order: [[4, "desc"]],
         dom: 'B<"toolbar">frtip ',
         buttons: [
             {
@@ -266,11 +266,12 @@ $(function () {
             {
                 targets: [-1],
                 class: 'text-center',
-                width: "10%",
+                width: "15%",
                 render: function (data, type, row) {
-                    var detalle = '<a type="button" rel="detalle" class="btn btn-success btn-sm btn-round" data-toggle="tooltip" title="Detalle de Productos" ><i class="fa fa-search"></i></a>' + '';
-                    var devolver = '<a type="button" rel="devolver" class="btn btn-danger btn-sm btn-round" style="color: white" data-toggle="tooltip" title="Devolver"><i class="fa fa-times"></i></a>';
-                    return detalle + devolver;
+                    var detalle = '<a type="button" rel="detalle" class="btn btn-success btn-sm btn-round" data-toggle="tooltip" title="Detalle de Productos" ><i class="fa fa-search"></i></a>' + ' ';
+                    var devolver = '<a type="button" rel="devolver" class="btn btn-danger btn-sm btn-round" style="color: white" data-toggle="tooltip" title="Devolver"><i class="fa fa-times"></i></a>'+ ' ';
+                    var pdf = '<a type="button" href= "/compra/printpdf/' + row[4] + '" rel="pdf" class="btn btn-primary btn-sm btn-round" style="color: white" data-toggle="tooltip" title="Reporte PDF"><i class="fa fa-file-pdf"></i></a>';
+                    return detalle + devolver + pdf;
                 }
             },
             {
@@ -298,6 +299,7 @@ $(function () {
             } else if (data[5] === 'DEVUELTA') {
                 $('td', row).eq(5).find('span').addClass('badge bg-important');
                 $('td', row).eq(6).find('a[rel="devolver"]').hide();
+                $('td', row).eq(6).find('a[rel="pdf"]').hide();
             }
 
         }
@@ -342,7 +344,7 @@ $(function () {
                     {data: 'producto.presentacion.nombre'},
                     {data: 'cantidad'},
                     {data: 'producto.pvp'},
-                    {data: 'compra.subtotal'}
+                    {data: 'subtotal'}
                 ],
                 columnDefs: [
                     {
