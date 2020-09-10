@@ -2,9 +2,8 @@
 <div id="sidebar" class="nav-collapse ">
     <!-- sidebar menu start-->
     <ul class="sidebar-menu" id="nav-accordion">
-        <p class="centered"><a href="#"><img src="{{ request.user.get_image }}" class="img-circle" width="80"
-                                             alt="user"></a></p>
-        <h5 class="centered">{{ user.first_name }} <br> {{ user.last_name }}</h5>
+        <p class="centered"><img src="{{ request.user.get_image }}" class="img-circle" width="80" alt="user"></p>
+        <a href="{% url 'empleado:profile' %}"><h5 class="centered">{{ user.first_name }} <br> {{ user.last_name }}</h5></a>
         <li class="mt">
             <a class="active" href="{% url 'menu' %}">
                 <i class="fa fa-home"></i>

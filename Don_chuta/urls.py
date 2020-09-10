@@ -39,10 +39,7 @@ path('categoria/', include('apps.categoria.urls', namespace='categoria')),
 path('empleado/', include('apps.empleado.urls', namespace='empleado')),
 path('compra/', include('apps.compra.urls', namespace='compra')),
 path('venta/', include('apps.venta.urls', namespace='venta')),
-# path('empleado/', include('apps.empleado.urls', namespace='empleado')),
 ]
-              # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
-              # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

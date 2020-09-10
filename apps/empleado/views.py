@@ -119,7 +119,7 @@ def editar(request, id):
         form = EmpleadoForm(instance=empleado)
         data['form'] = form
     else:
-        form = EmpleadoForm(request.POST, instance=empleado)
+        form = EmpleadoForm(request.POST, request.FILES, instance=empleado)
         if form.is_valid():
             form.save(commit=False)
             if int(form.data['cargo']) == 1:
