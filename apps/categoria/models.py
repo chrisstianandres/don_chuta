@@ -7,7 +7,7 @@ class Categoria(models.Model):
     descripcion = models.CharField(max_length=50)
 
     def __str__(self):
-        return '%s %s %s' % (self.id, self.nombre, self.descripcion)
+        return '%s' % self.nombre
 
     def toJSON(self):
         item = model_to_dict(self)
