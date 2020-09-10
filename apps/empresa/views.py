@@ -16,22 +16,21 @@ opc_entidad = 'Configuracion'
 crud = '/empresa/configuracion/'
 
 
-class Configuracion(SuperUserRequiredMixin, View):
-    def editar(self, request):
-        config = Empresa.objects.get(id=1)
-        data = {
-            'icono': opc_icono, 'crud': crud, 'entidad': opc_entidad,
-            'boton': 'Editar', 'titulo': 'Configuracion', 'form': EmpresaForm(instance=config)
-        }
-        if request.method == 'GET':
-            f = EmpresaForm(instance=config)
+def editar(request):
+    config = Empresa.objects.get(id=1)
+    data = {
+        'icono': opc_icono, 'crud': crud, 'entidad': opc_entidad,
+        'boton': 'Editar', 'titulo': 'Configuracion', 'form': EmpresaForm(instance=config)
+    }
+    if request.method == 'GET':
+        f = EmpresaForm(instance=config)
+    else:
+        f = EmpresaForm(request.POST, instance=config)
+        if f.is_valid():
+            f.save()
+            data['form'] = f
         else:
-            f = EmpresaForm(request.POST, instance=config)
-            if f.is_valid():
-                f.save()
-                data['form'] = f
-            else:
-                data['form'] = f
-            return render(request, 'front-end/empresa/empresa_form.html', data)
-        data['form'] = f
+            data['form'] = f
         return render(request, 'front-end/empresa/empresa_form.html', data)
+    data['form'] = f
+    return render(request, 'front-end/empresa/empresa_form.html', data)
