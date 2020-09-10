@@ -81,10 +81,3 @@ class EmpleadoForm(forms.ModelForm):
             'password': forms.PasswordInput(attrs={'class': 'form-control'}, render_value=True)
         }
 
-    # def clean_avatar(self, *args, **kwargs):
-    #     cleaned_data = super(EmpleadoForm, self).clean()
-    #     avatar = cleaned_data.get('avatar', None).file
-    #     if avatar is not None:
-    #         print(avatar)
-
-

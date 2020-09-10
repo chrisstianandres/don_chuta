@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 import json
 from django.db.models import Q
 
+from apps.Mixins import SuperUserRequiredMixin
 from apps.producto.forms import ProductoForm
 from apps.producto.models import Producto
 
@@ -14,7 +15,7 @@ opc_entidad = 'Productos'
 crud = '/producto/crear'
 
 
-class lista(ListView):
+class lista(SuperUserRequiredMixin, ListView):
     model = Producto
     template_name = 'front-end/producto/producto_list.html'
 

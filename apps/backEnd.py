@@ -5,7 +5,6 @@ from django.http import HttpResponse
 from django.http import *
 from django.urls import reverse_lazy
 
-from apps.Mixins import lodeguser
 from django.views.generic import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin, AccessMixin
 import json

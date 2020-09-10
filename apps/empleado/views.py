@@ -3,7 +3,9 @@ import json
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import ListView
 
+from apps.Mixins import SuperUserRequiredMixin
 from apps.cliente.models import Cliente
 from apps.empleado.forms import EmpleadoForm
 from apps.empleado.models import Empleado
@@ -14,15 +16,18 @@ opc_entidad = 'Empleado'
 crud = '/empleado/crear'
 
 
-def lista(request):
-    data = {
-        'icono': opc_icono, 'entidad': opc_entidad,
-        'boton': 'Nuevo Empleado', 'titulo': 'Listado de Empleados',
-        'nuevo': '/empleado/nuevo'
-    }
-    list = Empleado.objects.all()
-    data['list'] = list
-    return render(request, "front-end/empleado/empleado_list.html", data)
+class lista(SuperUserRequiredMixin, ListView):
+    model = Empleado
+    template_name = 'front-end/empleado/empleado_list.html'
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['icono'] = opc_icono
+        data['entidad'] = opc_entidad
+        data['boton'] = 'Nuevo Empleado'
+        data['titulo'] = 'Listado de Empleados'
+        data['nuevo'] = '/empleado/nuevo'
+        return data
 
 
 @csrf_exempt
@@ -80,7 +85,18 @@ def crear(request):
                     data['error'] = 'Numero de Cedula ya exitente en los Clientes'
                     data['form'] = f
                 elif verificar(f.data['cedula']):
-                    f.save()
+                    if int(f.data['cargo']) == 1:
+                        f.save()
+                        nw = f.save()
+                        ch = Empleado.objects.get(pk=nw.pk)
+                        ch.is_superuser = 1
+                        ch.save()
+                    else:
+                        f.save()
+                        nw = f.save()
+                        ch = Empleado.objects.get(pk=nw.pk)
+                        ch.is_superuser = 0
+                        ch.save()
                     return HttpResponseRedirect('/empleado/lista')
                 else:
                     data['error'] = 'Numero de Cedula no valido para Ecuador'
@@ -105,7 +121,19 @@ def editar(request, id):
     else:
         form = EmpleadoForm(request.POST, instance=empleado)
         if form.is_valid():
-            form.save()
+            form.save(commit=False)
+            if int(form.data['cargo']) == 1:
+                    form.save()
+                    nw = form.save()
+                    ch = Empleado.objects.get(pk=nw.pk)
+                    ch.is_superuser = 1
+                    ch.save()
+            else:
+                form.save()
+                nw = form.save()
+                ch = Empleado.objects.get(pk=nw.pk)
+                ch.is_superuser = 0
+                ch.save()
         else:
             data['form'] = form
         return HttpResponseRedirect('/empleado/lista')
