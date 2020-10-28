@@ -7,6 +7,7 @@ app_name = 'Venta'
 
 urlpatterns = [
     path('lista', login_required(lista.as_view()), name='lista'),
+    path('report_by_product', login_required(report.as_view()), name='report_by_product'),
     path('nuevo', login_required(views.nuevo), name='nuevo'),
     path('get_producto', login_required(views.get_producto), name='get_producto'),
     path('crear', login_required(views.crear), name='crear'),
@@ -17,6 +18,7 @@ urlpatterns = [
     path('eliminar', login_required(views.eliminar), name='eliminar'),
     path('chart', login_required(views.grap), name='chart'),
     path('data', login_required(views.data), name='data'),
+    path('data_report', login_required(views.data_report), name='data_report'),
     path('printpdf/<int:pk>', login_required(printpdf.as_view()), name='printpdf'),
 
 ]

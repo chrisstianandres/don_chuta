@@ -41,6 +41,25 @@ class lista(ListView):
         data['boton'] = 'Nueva Venta'
         data['titulo'] = 'Listado de Ventas'
         data['nuevo'] = '/venta/nuevo'
+        data['filter_prod'] = '/venta/report_by_product'
+        return data
+
+
+class report(ListView):
+    model = Venta
+    template_name = 'front-end/venta/venta_report_product.html'
+
+    def get_queryset(self):
+        return Venta.objects.none()
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['icono'] = opc_icono
+        data['entidad'] = opc_entidad
+        data['boton'] = 'Nueva Venta'
+        data['titulo'] = 'Listado de Ventas'
+        data['nuevo'] = '/venta/nuevo'
+        data['filter_prod'] = '/venta/lista'
         return data
 
 
@@ -73,6 +92,39 @@ def data(request):
                     c.id,
                     c.get_estado_display(),
                     c.id
+                ])
+    except:
+        pass
+    return JsonResponse(data, safe=False)
+
+
+@csrf_exempt
+def data_report(request):
+    data = []
+    start_date = request.POST.get('start_date', '')
+    end_date = request.POST.get('end_date', '')
+    try:
+        if start_date == '' and end_date == '':
+            query = Detalle_venta.objects.values('venta__fecha_venta', 'producto__nombre', 'producto__pvp').order_by(). \
+                annotate(Sum('cantidad'))
+            for p in query:
+                data.append([
+                    p['venta__fecha_venta'].strftime("%d/%m/%Y"),
+                    p['producto__nombre'],
+                    int(p['cantidad__sum']),
+                    format(p['producto__pvp'], '.2f'),
+                    format(p['producto__pvp'] * p['cantidad__sum'], '.2f'),
+                ])
+        else:
+            query = Detalle_venta.objects.values('venta__fecha_venta', 'producto__nombre', 'producto__pvp') \
+                .filter(venta__fecha_venta__range=[start_date, end_date]).order_by().annotate(Sum('cantidad'))
+            for p in query:
+                data.append([
+                    p['venta__fecha_venta'].strftime("%d/%m/%Y"),
+                    p['producto__nombre'],
+                    int(p['cantidad__sum']),
+                    format(p['producto__pvp'], '.2f'),
+                    format(p['producto__pvp'] * p['cantidad__sum'], '.2f'),
                 ])
     except:
         pass
