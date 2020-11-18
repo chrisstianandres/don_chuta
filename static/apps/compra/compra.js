@@ -13,12 +13,12 @@ var compras = {
         var subtotal = 0.00;
         var iva_emp = 0.00;
         $.each(this.items.productos, function (pos, dict) {
-            dict.subtotal = dict.cantidad * parseFloat(dict.pvp);
+            dict.subtotal = dict.cantidad * parseFloat(dict.pcp);
             subtotal += dict.subtotal;
             iva_emp = dict.iva_emp;
         });
         this.items.subtotal = subtotal;
-        this.items.iva = this.items.subtotal * iva_emp;
+        this.items.iva = this.items.subtotal * parseFloat(iva_emp);
         this.items.total = this.items.subtotal + this.items.iva;
         $('input[name="subtotal"]').val(this.items.subtotal.toFixed(2));
         $('input[name="iva"]').val(this.items.iva.toFixed(2));
@@ -45,7 +45,7 @@ var compras = {
                 {data: "categoria.nombre"},
                 {data: "presentacion.nombre"},
                 {data: "cantidad"},
-                {data: "pvp"},
+                {data: "pcp"},
                 {data: "subtotal"}
             ],
             columnDefs: [
@@ -99,7 +99,6 @@ $(function () {
     //seleccionar producto del select producto
     $('#id_producto').on('select2:select', function (e) {
         var crud = $('input[name="crud"]').val();
-
         $.ajax({
             type: "POST",
             url: crud,

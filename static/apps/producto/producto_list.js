@@ -48,7 +48,7 @@ $(function () {
                 pageSize: 'A4', //A3 , A5 , A6 , legal , letter
                 download: 'open',
                 exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6],
+                    columns: [0, 1, 2, 3, 4, 5, 6, 7],
                     search: 'applied',
                     order: 'applied'
                 },
@@ -117,7 +117,7 @@ $(function () {
                         return 4;
                     };
                     doc.content[0].layout = objLayout;
-                    doc.content[1].table.widths = [35, 180, '*', 90, 70, 180, 70];
+                    doc.content[1].table.widths = [35, 150, '*', 90, 70, 150, 70, 60 ];
                     doc.styles.tableBodyEven.alignment = 'center';
                     doc.styles.tableBodyOdd.alignment = 'center';
                 }
@@ -129,7 +129,7 @@ $(function () {
         ],
         columnDefs: [
             {
-                targets: [-4],
+                targets: [-5],
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {
@@ -137,7 +137,7 @@ $(function () {
                 }
             },
             {
-                targets: [-2],
+                targets: [-2, -3],
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {

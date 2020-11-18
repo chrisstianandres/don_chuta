@@ -1,5 +1,6 @@
 $(document).ready(function () {
-    $('input[name="pvp"]').TouchSpin({
+    indice_ganancia();
+    $('input[name="pcp"]').TouchSpin({
         min: 0.05,
         max: 1000000,
         step: 0.01,
@@ -9,6 +10,10 @@ $(document).ready(function () {
         maxboostedstep: 10,
         prefix: '$'
     });
+    $('input[name="pcp"]').on('change keyup', function () {
+        indice_ganancia();
+    });
+
     $.validator.setDefaults({
         errorClass: 'help-block',
         highlight: function (element, errorClass, validClass) {
@@ -76,3 +81,11 @@ $(document).ready(function () {
     });
 
 });
+
+function indice_ganancia() {
+    var indice = 0.40;
+    var pc = $('input[name="pcp"]').val();
+    var tind = parseFloat(pc * (1 + indice)).toFixed(2);
+    console.log(pc);
+    $('input[name="pvp"]').val(tind).attr('readonly', true);
+}

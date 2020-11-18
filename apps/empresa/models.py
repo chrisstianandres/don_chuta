@@ -9,6 +9,7 @@ class Empresa(models.Model):
     telefono = models.CharField(max_length=10, unique=True)
     correo = models.CharField(max_length=50, null=True, blank=True, unique=True)
     iva = models.DecimalField(default=0.12, max_digits=9, decimal_places=2)
+    indice = models.DecimalField(default=0.40, max_digits=9, decimal_places=2)
 
     def __str__(self):
         return '%s %s' % (self.nombre, self.ruc)

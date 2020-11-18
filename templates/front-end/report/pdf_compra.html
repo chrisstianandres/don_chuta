@@ -83,13 +83,13 @@
     </tr>
     </thead>
     <tbody>
-    {% for d in sale.detalle_compra_set.all %}
+    {% for d in det_sale %}
         <tr {% if forloop.first %}style="padding-top: 3px;" {% endif %}>
             <td>{{ d.producto.nombre }}</td>
             <td>{{ d.producto.categoria.nombre }}</td>
             <td>{{ d.producto.presentacion.nombre }}</td>
             <td class="text-center">{{ d.cantidad }}</td>
-            <td class="text-center">${{ d.producto.pvp }}</td>
+            <td class="text-center">${{ d.producto.pcp }}</td>
             <td style="text-align: right;">${{ d.subtotal }}</td>
         </tr>
     {% endfor %}

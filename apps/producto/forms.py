@@ -24,6 +24,9 @@ class ProductoForm(forms.ModelForm):
                 'class': 'form-control select2'}
             self.fields['pvp'].widget.attrs = {
                 'class': 'form-control form-control-sm input-sm'}
+            self.fields['pcp'].widget.attrs = {
+                'class': 'form-control form-control-sm input-sm'}
+            self.fields['pcp'].initial = 0.05
 
         # habilitar, desabilitar, y mas
 
@@ -33,6 +36,7 @@ class ProductoForm(forms.ModelForm):
                   'descripcion',
                   'categoria',
                   'presentacion',
+                  'pcp',
                   'pvp',
                   ]
         labels = {
@@ -40,10 +44,12 @@ class ProductoForm(forms.ModelForm):
             'descripcion': 'Decripcion',
             'categoria': 'Categoria',
             'presentacion': 'Presentacion',
+            'pcp': 'P. de Compra.',
             'pvp': 'P.V.P.',
         }
         widgets = {
             'nombre': forms.TextInput(),
+            'pcp': forms.TextInput(attrs={'value': 0.05}),
             'pvp': forms.TextInput(),
             'decripcion': forms.Textarea(attrs={'col': '3', 'row': '2'})
         }

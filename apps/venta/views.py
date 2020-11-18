@@ -10,7 +10,7 @@ from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import *
 
-from apps.compra.models import Compra
+from apps.compra.models import Compra, Detalle_compra
 from apps.venta.forms import VentaForm, Detalle_VentaForm
 from apps.venta.models import Venta, Detalle_venta
 from apps.empresa.models import Empresa

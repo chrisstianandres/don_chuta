@@ -19,17 +19,15 @@ class EmpresaForm(forms.ModelForm):
             self.fields['direccion'].widget = TextInput(
                 attrs={'placeholder': 'Ingrese numero la direccion de la empresa',
                        'class': 'form-control form-rounded'})
-            self.fields['correo'].widget = TextInput(attrs={'placeholder': 'Ingrese numero la direccion de la empresa',
-                                                            'class': 'form-control form-rounded'})
-            self.fields['ciudad'].widget = TextInput(attrs={'placeholder': 'Ingrese numero la direccion de la empresa',
+            self.fields['correo'].widget = TextInput(attrs={'class': 'form-control form-rounded'})
+            self.fields['ciudad'].widget = TextInput(attrs={'placeholder': 'Ingrese numero la ciudada de la empresa',
                                                             'class': 'form-control form-rounded'})
             self.fields['telefono'].widget = TextInput(
                 attrs={'placeholder': 'Ingrese numero la direccion de la empresa',
                        'class': 'form-control form-rounded'})
-            self.fields['iva'].widget = TextInput(attrs={'placeholder': 'Ingrese numero la direccion de la empresa',
-                                                         'class': 'form-control form-rounded', 'value': 0.12})
-            self.fields['ruc'].widget = TextInput(attrs={'placeholder': 'Ingrese numero la direccion de la empresa',
-                                                         'class': 'form-control form-rounded'})
+            self.fields['iva'].widget = TextInput(attrs={'class': 'form-control form-rounded', 'value': 0.12})
+            self.fields['indice'].widget = TextInput(attrs={'class': 'form-control form-rounded', 'value': 0.40})
+            self.fields['ruc'].widget = TextInput(attrs={'class': 'form-control form-rounded'})
 
         # habilitar, desabilitar, y mas
 
@@ -41,6 +39,7 @@ class EmpresaForm(forms.ModelForm):
                   'correo',
                   'direccion',
                   'iva',
+                  'indice',
                   'telefono'
                   ]
         labels = {
@@ -50,6 +49,7 @@ class EmpresaForm(forms.ModelForm):
             'correo': 'Correo',
             'direccion': 'Direecion',
             'iva': 'Iva',
+            'indice': 'Indice de Ganancia',
             'telefono': 'Telefono',
         }
         widgets = {
@@ -59,5 +59,6 @@ class EmpresaForm(forms.ModelForm):
             'correo': forms.TextInput(),
             'direccion': forms.TextInput(),
             'iva': forms.TextInput(),
+            'indice': forms.TextInput(),
             'telefono': forms.TextInput()
         }

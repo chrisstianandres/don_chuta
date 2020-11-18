@@ -82,17 +82,25 @@
             $('#id_ruc').attr('readonly', true);
             $('#id_correo').attr('readonly', true);
             $('#id_direccion').attr('readonly', true);
-            $('#id_iva').attr('readonly', true);
-            $('#id_telefono').attr('readonly', true);
-            $('#editar').on("click", editar);
-            $('input[name="iva"]').TouchSpin({
-               min: 0,
+            $('#id_indice').attr('disabled', 'disabled').TouchSpin({
+                min: 0.01,
                 max: 100,
                 step: 0.01,
                 decimals: 2,
                 boostat: 5,
                 maxboostedstep: 10
             });
+        });
+        $('#id_iva').attr('disabled', 'disabled');
+        $('#id_telefono').attr('readonly', true);
+        $('#editar').on("click", editar);
+        $('input[name="iva"]').TouchSpin({
+            min: 0,
+            max: 100,
+            step: 0.01,
+            decimals: 2,
+            boostat: 5,
+            maxboostedstep: 10
         });
 
         function editar() {
@@ -103,8 +111,9 @@
             $('#id_ruc').attr('readonly', false);
             $('#id_correo').attr('readonly', false);
             $('#id_direccion').attr('readonly', false);
-            $('#id_iva').attr('readonly', false);
+            $('#id_iva').attr('disabled', false);
             $('#id_telefono').attr('readonly', false);
+            $('#id_indice').attr('disabled', false);
 
 
         }

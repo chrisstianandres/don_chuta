@@ -172,6 +172,7 @@ def get_detalle_productos(id):
             iva_emp = Empresa.objects.get(pk=1)
             item = i.producto.toJSON()
             item['cantidad'] = i.cantidad
+            item['pcp'] = format(float(i.producto.pcp) / float((1.00 + float(iva_emp.iva))), '.2f')
             item['iva_emp'] = format(iva_emp.iva, '.2f')
             data.append(item)
     except:
@@ -307,11 +308,26 @@ class printpdf(View):
             )
         return path
 
+    def pvp_cal(self, *args, **kwargs):
+        data = []
+        try:
+            iva_emp = Empresa.objects.get(pk=1)
+            for i in Detalle_compra.objects.filter(compra_id=self.kwargs['pk']):
+                item = i.compra.toJSON()
+                item['producto'] = i.producto.toJSON()
+                item['cantidad'] = i.cantidad
+                item['subtotal'] = format(float(i.producto.pcp_cal) * i.cantidad, '.2f')
+                data.append(item)
+        except:
+            pass
+        return data
+
     def get(self, request, *args, **kwargs):
         try:
             template = get_template('front-end/report/pdf_compra.html')
             context = {'title': 'Comprobante de Compra',
                        'sale': Compra.objects.get(pk=self.kwargs['pk']),
+                       'det_sale': self.pvp_cal(),
                        'empresa': Empresa.objects.get(id=1),
                        'icon': 'media/logo_don_chuta.png'
                        }
